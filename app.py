@@ -8,15 +8,12 @@ from aws_cdk import core
 
 app = core.App()
 
-env_ORACLE = core.Environment(region="us-east-1")
-# env_ORACLE = core.Environment(account="", region="us-east-1")
 
 # VPC Stack for hosting Secure API & Other resources
 vpc_stack = VpcStack(
     app,
     f"{app.node.try_get_context('service_name')}-vpc-stack",
-    description="Miztiik Automation: VPC to host resources for DB Migration",
-    env=env_ORACLE
+    description="Miztiik Automation: VPC to host resources for DB Migration"
 )
 
 # Build the pre-reqs for MSSQL on EC2
@@ -25,8 +22,7 @@ database_migration_stack = DatabaseMigrationPrerequisiteStack(
     f"{app.node.try_get_context('service_name')}-database-migration-prerequisite-stack",
     stack_log_level="INFO",
     vpc=vpc_stack.vpc,
-    description="Miztiik Automation: DMS Best Practice Demonstration. This stack will create roles and security groups to assist in database migration",
-    env=env_ORACLE
+    description="Miztiik Automation: DMS Best Practice Demonstration. This stack will create roles and security groups to assist in database migration"
 )
 
 
@@ -38,8 +34,7 @@ redis_on_ec2_stack = RedisOnEc2Stack(
     ec2_instance_type="m5.large",
     ssh_key_name=database_migration_stack.custom_ssh_key_name,
     stack_log_level="INFO",
-    description="Miztiik Automation: Source Database: Redis on EC2",
-    env=env_ORACLE
+    description="Miztiik Automation: Source Database: Redis on EC2"
 )
 
 
